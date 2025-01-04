@@ -23,6 +23,8 @@ import dev.langchain4j.rag.query.transformer.CompressingQueryTransformer;
 import dev.langchain4j.rag.query.transformer.QueryTransformer;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.store.embedding.EmbeddingMatch;
+import dev.langchain4j.store.embedding.EmbeddingSearchRequest;
+import dev.langchain4j.store.embedding.EmbeddingSearchResult;
 import dev.langchain4j.store.embedding.EmbeddingStore;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -32,6 +34,8 @@ import llm.devoxx.json.Question;
 import llm.devoxx.util.Constants;
 import llm.devoxx.util.DocumentChat;
 import llm.devoxx.util.Tools;
+
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,15 +58,25 @@ public class QuestionService {
 
     private ChatMemory chatMemory = MessageWindowChatMemory.withMaxMessages(10);
 
+    private final PromptTemplate promptTemplate = PromptTemplate.from(
+        """
+                Answer the following question :
+               
+                Question:
+                {{question}}
+                
+                Base your answer on the following information:
+                {{information}}
+                """
+    );
+
     public CompleteAnswer processQuestion(Question question) {
 
         EmbeddingStore<TextSegment> store = tools.getStore();
 
         LanguageModel languageModel = tools.createLanguageModel();
 
-        Embedding queryEmbedded = embeddingModel.embed(question.getQuestion()).content();
-
-        List<EmbeddingMatch<TextSegment>> relevant = store.findRelevant(queryEmbedded,3, 0.55);
+        List<EmbeddingMatch<TextSegment>> relevant = getEmbeddingMatches(question, store);
 
         List<Answer> answers = new ArrayList<>();
 
@@ -76,50 +90,22 @@ public class QuestionService {
         }
 
         if (question.isGenerateAnswer()) {
-
-            PromptTemplate template = PromptTemplate.from(
-                    "Answer the following question :\n"
-                        + "\n"
-                        + "Question:\n"
-                        + "{{question}}\n"
-                        + "\n"
-                        + "Base your answer on the following information:\n"
-                        + "{{information}}"
-            );
-
             String information = relevant.stream().map(rlv -> rlv.embedded().text()).collect(Collectors.joining("\n\n"));
-            Map<String, Object> templateParameters = new HashMap<>();
-            templateParameters.put("question", question.getQuestion());
-            templateParameters.put("information", information);
-            Prompt prompt = template.apply(templateParameters);
+            Prompt prompt = getPrompt(question, information);
 
             Response<String> generatedAnswer = languageModel.generate(prompt);
             return new CompleteAnswer(generatedAnswer.content(), answers);
         }
-
         return new CompleteAnswer(Constants.EMPTY_STRING, answers);
-
     }
 
-        public CompleteAnswer chatWithDocsAndMemory(Question question) {
+    public CompleteAnswer chatWithDocsAndMemory(Question question) {
 
         EmbeddingStore<TextSegment> store = tools.getStore();
 
         ChatLanguageModel chatModel = tools.createChatModel();
 
-        Embedding queryEmbedded = embeddingModel.embed(question.getQuestion()).content();
-
-        List<EmbeddingMatch<TextSegment>> relevant = store.findRelevant(queryEmbedded,3, 0.55);
-
-        PromptTemplate promptTemplate = PromptTemplate.from(
-                "Answer the following question :\n"
-                        + "\n"
-                        + "Question:\n"
-                        + "{{question}}\n"
-                        + "\n"
-                        + "Base your answer on the following information:\n"
-                        + "{{information}}"
-        );
+        List<EmbeddingMatch<TextSegment>> relevant = getEmbeddingMatches(question, store);
 
         List<Answer> answers = new ArrayList<>();
         StringBuilder info = new StringBuilder();
@@ -133,11 +119,8 @@ public class QuestionService {
         }
 
         String information = info.toString();
-        Map<String, Object> parameters = new HashMap<>();
-        parameters.put("question", question.getQuestion());
-        parameters.put("information", information);
 
-        Prompt prompt = promptTemplate.apply(parameters);
+        Prompt prompt = getPrompt(question, information);
 
         QueryTransformer queryTransformer = new CompressingQueryTransformer(chatModel);
         Query query = Query.from(prompt.text(), new Metadata(UserMessage.from(prompt.text()), chatMemory.messages(),
@@ -169,10 +152,29 @@ public class QuestionService {
 
         String reponse = toto.answer(question.getQuestion());
 
-
-
         return new CompleteAnswer(reponse, answers);
-
     }
 
+    private @NotNull List<EmbeddingMatch<TextSegment>> getEmbeddingMatches(Question question, EmbeddingStore<TextSegment> store) {
+        LOGGER.info("Start generating embedding for question: \"{}\"", question.getQuestion());
+        Embedding queryEmbedded = embeddingModel.embed(question.getQuestion()).content();
+        LOGGER.info("End of embedding's generation ");
+
+        EmbeddingSearchResult<TextSegment> docs = store.search(EmbeddingSearchRequest.builder()
+                .queryEmbedding(queryEmbedded)
+                .build());
+
+        List<EmbeddingMatch<TextSegment>> relevant = docs.matches();
+        LOGGER.info("End of finding relevant documents");
+
+        relevant.sort((o1, o2) -> o2.score().compareTo(o1.score()));
+        return relevant;
+    }
+
+    private Prompt getPrompt(Question question, String information) {
+        Map<String, Object> templateParameters = new HashMap<>();
+        templateParameters.put("question", question.getQuestion());
+        templateParameters.put("information", information);
+        return promptTemplate.apply(templateParameters);
+    }
 }
