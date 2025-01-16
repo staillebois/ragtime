@@ -78,6 +78,8 @@ Une fois lancé, chargez le modèle avec
 
 ```
 docker exec -it ollama-devoxx ollama pull gemma:2b
+docker exec -it ollama-devoxx ollama pull wizardlm2
+docker exec -it ollama-devoxx ollama pull nomic-embed-text:latest
 ```
 
 Pour discuter avec le modèle, lancez `docker exec -it ollama-devoxx ollama run gemma:2b` et dites quelque chose, par exemple "Bonjour, comment vas-tu ?"
@@ -94,3 +96,16 @@ mvn quarkus:dev
 
 La console de développement de Quarkus est alors disponible sur [http://localhost:8080/q/dev/](http://localhost:8080/q/dev/)
 
+## Services
+
+Pour créer les embeddings et indexer:
+
+```
+curl -H "Content-Type: application/json" -d '{"path":"data"}' -XPOST http://localhost:8080/embed/folder
+```
+
+Envoyer une question:
+
+```
+curl -H "Content-Type: application/json" -d '{"question":"Who confirms Dragonfly mission to Titan ?"}' -XPOST http://localhost:8080/question/memory
+```
