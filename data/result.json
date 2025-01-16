@@ -1,0 +1,38 @@
+{
+    "generatedAnswer": " NASA has confirmed its Dragonfly rotorcraft mission to Titan, one of Saturn's moons. This confirmation allows the team behind the project to finalize its design and proceed with the construction of the spacecraft, which is scheduled for launch in July 2028 and is set to arrive at Titan in 2034. The decision comes after a period of uncertainty regarding the mission's future due to budgetary constraints and shifting launch dates, as the Dragonfly was initially slated for a 2026 launch.\n\nThe confirmation of the Titan visit is significant as it brings a sense of optimism amidst budgetary challenges at NASA. The increasing costs associated with the Mars Sample Return expedition have led to concerns about potential funding impacts on other projects. However, the approval of the Dragonfly mission, which will be designed and built under the direction of the Johns Hopkins Applied Physics Laboratory (APL) in Laurel, Maryland, powered by a Multi-Mission Radioisotope Thermoelectric Generator (MMRTG), is a relief to the team and the scientific community.\n\nDragonfly is designed as a dual-quadcopter drone that will travel hundreds of kilometers during its planned two-year exploration of Titan, covering tens of miles or kilometers in under an hour. This makes it capable of traveling further than any planetary rover has to date. The vehicle will spend most of its time on the surface of Titan, making science measurements, as Titan's organic haze, imaged by the Voyager probes in 1979 and 1980, previously obscured the surface in visible wavelengths. Further exploration was enabled by the Cassini orbiter, which arrived in 2004 and mapped much of the moon's surface, and the Huygens probe, which parachuted to the surface in 2005. Dragonfly will continue this exploration, providing valuable insights into Titan's environment, which is of particular interest due to its liquid lakes and rivers of hydrocarbons and its complex organic chemistry that could mirror pre-biotic conditions found on Earth.",
+    "relevantDocuments": [
+        {
+            "metadata": {
+                "datetime": "2024-04-17 17:30",
+                "keywords": "Astronomy, NASA, Science",
+                "index": "0",
+                "title": "NASA confirms Dragonfly mission to Titan",
+                "url": "https://go.theregister.com/feed/www.theregister.com/2024/04/17/nasa_confirms_dragonfly_mission/"
+            },
+            "score": 0.91086036,
+            "text": "NASA has finally confirmed its Dragonfly rotorcraft mission will be heading to Titan, one of Saturn's Moons, meaning the team behind the project can finalize its design and get to work building the spacecraft.\n\nThings had been looking a little risky for the drone as budgets were squeezed and launch dates shifted – Dragonfly was originally slated for launch in 2026. But yesterday NASA approved the mission and the July 2028 launch date, with a scheduled arrival at Titan in 2034."
+        },
+        {
+            "metadata": {
+                "datetime": "2024-04-17 17:30",
+                "keywords": "Astronomy, NASA, Science",
+                "index": "2",
+                "title": "NASA confirms Dragonfly mission to Titan",
+                "url": "https://go.theregister.com/feed/www.theregister.com/2024/04/17/nasa_confirms_dragonfly_mission/"
+            },
+            "score": 0.8915861,
+            "text": "Confirmation of the Titan visit is a spark of optimism amid budgetary gloom at NASA. The increasing costs of the Mars Sample Return expedition combined with funding constraints could mean cannibalization for some of the agency's other projects. It is, therefore, a relief for many engineers and scientists that DragonFly, which is to be designed and built under the direction of the Johns Hopkins Applied Physics Laboratory (APL) in Laurel, Maryland, received its confirmation.\n\nPowered by a Multi-Mission Radioisotope Thermoelectric Generator (MMRTG) – like the Mars Curiosity rover – the Dragonfly dual-quadcopter drone is expected to travel hundreds of kilometers during its planned two-year exploration of Titan."
+        },
+        {
+            "metadata": {
+                "datetime": "2024-04-17 17:30",
+                "keywords": "Astronomy, NASA, Science",
+                "index": "3",
+                "title": "NASA confirms Dragonfly mission to Titan",
+                "url": "https://go.theregister.com/feed/www.theregister.com/2024/04/17/nasa_confirms_dragonfly_mission/"
+            },
+            "score": 0.8809011,
+            "text": "According to the team, \"In under an hour, Dragonfly will cover tens of miles or kilometers, farther than any planetary rover has traveled.\"\n\nThe vehicle will, however, spend most of its time on the surface of Titan, making science measurements.\n\nTitan has long fascinated scientists. The Voyager probes imaged the moon in 1979 and 1980, but the organic haze in the atmosphere obscured the surface in visible wavelengths. In 2004, the Cassini orbiter arrived and mapped much of the moon's surface. In 2005, Cassini released the Huygens probe, which parachuted to the surface.\n\nIf everything goes according to plan, almost 30 years later, it will be the turn of Dragonfly to inspect the surface of Titan. ®"
+        }
+    ]
+}
